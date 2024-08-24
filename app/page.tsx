@@ -9,7 +9,6 @@ export default function Home() {
   const [refreshKey, setRefreshKey] = useState(0);
 
   const handleEntryCreated = () => {
-    // エントリーが作成されたらリストを更新
     setRefreshKey(oldKey => oldKey + 1);
   };
 
