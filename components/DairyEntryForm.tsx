@@ -13,10 +13,17 @@ const DiaryEntryForm: React.FC<DiaryEntryFormProps> = ({ onSuccess, supabase }) 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      console.error('User not authenticated');
+      return;
+    }
+  
     const { data, error } = await supabase
       .from('diary_entries')
-      .insert([{ title, content }]);
-
+      .insert([{ title, content, user_id: user.id }]);
+  
     if (error) {
       console.error('Error inserting diary entry:', error);
     } else {
@@ -25,7 +32,7 @@ const DiaryEntryForm: React.FC<DiaryEntryFormProps> = ({ onSuccess, supabase }) 
       onSuccess();
     }
   };
-
+  
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
